@@ -64,7 +64,7 @@ pipeline {
             
             stage('ES:Build') {
               steps {
-                sh "./gradlew assemble" // Use gradle wrapper in repository
+                sh "./gradlew assemble --info" // Use gradle wrapper in repository
               } // steps
             } // stage ES:Build
 
