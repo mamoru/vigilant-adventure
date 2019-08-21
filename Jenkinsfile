@@ -45,7 +45,7 @@ pipeline {
         stage('ElasticSearch') {
           agent {
             dockerfile {
-              filename 'Dockerfile.jdk12-dc
+              filename 'Dockerfile.jdk12-dc'
               args '-v /var/run/docker.sock:/var/run/docker.sock'
             } // Use Jenkins Docker Plugin to run a new container from a dockerfile with jdk12 and Docker Compose
           }
