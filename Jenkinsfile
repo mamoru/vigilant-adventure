@@ -2,6 +2,13 @@
 // Jenkins Pipeline
 pipeline {
   agent any
+  parameters {
+    choice(
+      name: 'GRADLE_LOGGING_LEVEL',
+      choices: ['lifecycle', 'quiet', 'warn', 'info', 'debug'],
+      description: 'You can customize the verbosity of Gradle logging with these options'
+    )
+  }
   /*options {
       parallelsAlwaysFailFast()
   }*/
@@ -17,7 +24,7 @@ pipeline {
 
             stage('HW:Build') {
               steps {
-                sh "gradle build -s" // Use build.gradle directly using Gradle in docker container
+                sh "gradle build -s -Dorg.gradle.logging.level=${params.GRADLE_LOGGING_LEVEL}" // Use build.gradle directly using Gradle in docker container
                 /* // Jenkins Pipelines Gradle step not available yet, using sh instead
                 gradle {
                   tasks('build')
@@ -64,7 +71,7 @@ pipeline {
             
             stage('ES:Build') {
               steps {
-                sh "./gradlew assemble --info" // Use gradle wrapper in repository
+                sh "./gradlew assemble -Dorg.gradle.logging.level=${params.GRADLE_LOGGING_LEVEL}" // Use gradle wrapper in repository
               } // steps
             } // stage ES:Build
 
