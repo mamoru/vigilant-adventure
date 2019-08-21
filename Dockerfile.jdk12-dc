@@ -1,0 +1,58 @@
+FROM debian
+
+## Heavy-weight container with:
+# OpenJDK 12
+# Docker CE
+# Docker Compose 1.24.1
+
+ENV JAVA_HOME=/usr/java/openjdk-12 \
+    PATH=$JAVA_HOME/bin:$PATH \
+    JAVA_VERSION=12 \
+    JAVA_URL=https://download.java.net/java/GA/jdk12/GPL/openjdk-12_linux-x64_bin.tar.gz \
+    JAVA_SHA256=b43bc15f4934f6d321170419f2c24451486bc848a2179af5e49d10721438dd56 \
+    DOCKER_COMPOSE_VERSION=1.24.1 \
+    DOCKER_COMPOSE_MD5=7048a965a86e6eed1622e0990e9a7ab4
+
+RUN set -eux; \
+  apt-get update; \
+  apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl gnupg2 software-properties-common acl gzip tar; \
+  \
+#https://github.com/docker-library/openjdk/blob/bf1072ab57caa868bbe13683ca4e9e6169010f05/12/jdk/oracle/Dockerfile#L21-L32
+	\
+	curl -fL -o /openjdk.tgz "$JAVA_URL"; \
+	echo "$JAVA_SHA256 */openjdk.tgz" | sha256sum -c -; \
+	mkdir -p "$JAVA_HOME"; \
+	tar --extract --file /openjdk.tgz --directory "$JAVA_HOME" --strip-components 1; \
+	rm /openjdk.tgz; \
+	\
+# https://github.com/oracle/docker-images/blob/a56e0d1ed968ff669d2e2ba8a1483d0f3acc80c0/OracleJava/java-8/Dockerfile#L17-L19
+	ln -sfT "$JAVA_HOME" /usr/java/default; \
+	ln -sfT "$JAVA_HOME" /usr/java/latest; \
+	for bin in "$JAVA_HOME/bin/"*; do \
+		base="$(basename "$bin")"; \
+		[ ! -e "/usr/bin/$base" ]; \
+		update-alternatives --install "/usr/bin/$base" "$base" "$bin" 20000; \
+	done; \
+	\
+# https://github.com/docker-library/openjdk/issues/212#issuecomment-420979840
+# https://openjdk.java.net/jeps/341
+	java -Xshare:dump; \
+	\
+# basic smoke test
+	java --version; \
+	javac --version; \
+  \
+  curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -; \
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"; \
+  apt-get update; \
+  apt-get install -y --no-install-recommends docker-ce; \
+  rm -rf /var/lib/apt/lists/*; \
+  \
+  curl -o /bin/docker-compose -SL https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-Linux-x86_64; \
+  echo "$DOCKER_COMPOSE_MD5  /bin/docker-compose" | md5sum -c -; \
+  chmod +x /bin/docker-compose;
+ 
+# https://docs.oracle.com/javase/10/tools/jshell.htm
+# https://docs.oracle.com/javase/10/jshell/
+# https://en.wikipedia.org/wiki/JShell
+CMD ["jshell"]
