@@ -11,13 +11,15 @@ ENV JAVA_HOME=/usr/java/openjdk-12 \
     JAVA_URL=https://download.java.net/java/GA/jdk12/GPL/openjdk-12_linux-x64_bin.tar.gz \
     JAVA_SHA256=b43bc15f4934f6d321170419f2c24451486bc848a2179af5e49d10721438dd56 \
     DOCKER_COMPOSE_VERSION=1.24.1 \
-    DOCKER_COMPOSE_MD5=7048a965a86e6eed1622e0990e9a7ab4
+    DOCKER_COMPOSE_MD5=7048a965a86e6eed1622e0990e9a7ab4 \
+    JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8" \
+    LANG=C.UTF-8
 
 RUN set -eux; \
   apt-get update; \
   apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl gnupg2 software-properties-common acl gzip tar git; \
   \
-#https://github.com/docker-library/openjdk/blob/bf1072ab57caa868bbe13683ca4e9e6169010f05/12/jdk/oracle/Dockerfile#L21-L32
+# https://github.com/docker-library/openjdk/blob/bf1072ab57caa868bbe13683ca4e9e6169010f05/12/jdk/oracle/Dockerfile#L21-L32
 	\
 	curl -fL -o /openjdk.tgz "$JAVA_URL"; \
 	echo "$JAVA_SHA256 */openjdk.tgz" | sha256sum -c -; \
