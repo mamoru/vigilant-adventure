@@ -44,7 +44,10 @@ pipeline {
 
         stage('ElasticSearch') {
           agent {
-            docker { image 'gradle:jdk12' } // Use Jenkins Docker Plugin to run a new gradle container with jdk12
+            dockerfile {
+              filename 'Dockerfile.ElasticSearch
+              args '-v /var/run/docker.sock:/var/run/docker.sock'
+            } // Use Jenkins Docker Plugin to run a new container from a dockerfile
           }
           stages {
 
