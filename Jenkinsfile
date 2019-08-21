@@ -71,7 +71,7 @@ pipeline {
             
             stage('ES:Build') {
               steps {
-                sh "./gradlew assemble -Dorg.gradle.logging.level=${params.GRADLE_LOGGING_LEVEL}" // Use gradle wrapper in repository
+                sh "./gradlew assemble -s -Dorg.gradle.logging.level=${params.GRADLE_LOGGING_LEVEL}" // Use gradle wrapper in repository
               } // steps
             } // stage ES:Build
 
