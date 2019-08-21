@@ -48,9 +48,9 @@ RUN set -eux; \
   apt-get install -y --no-install-recommends docker-ce; \
   rm -rf /var/lib/apt/lists/*; \
   \
-  curl -o /bin/docker-compose -SL https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-Linux-x86_64; \
-  echo "$DOCKER_COMPOSE_MD5  /bin/docker-compose" | md5sum -c -; \
-  chmod +x /bin/docker-compose;
+  curl -o /usr/bin/docker-compose -SL https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-Linux-x86_64; \
+  echo "$DOCKER_COMPOSE_MD5  /usr/bin/docker-compose" | md5sum -c -; \
+  chmod +x /usr/bin/docker-compose;
  
 # https://docs.oracle.com/javase/10/tools/jshell.htm
 # https://docs.oracle.com/javase/10/jshell/
