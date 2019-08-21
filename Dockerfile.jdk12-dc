@@ -15,7 +15,7 @@ ENV JAVA_HOME=/usr/java/openjdk-12 \
 
 RUN set -eux; \
   apt-get update; \
-  apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl gnupg2 software-properties-common acl gzip tar; \
+  apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl gnupg2 software-properties-common acl gzip tar git; \
   \
 #https://github.com/docker-library/openjdk/blob/bf1072ab57caa868bbe13683ca4e9e6169010f05/12/jdk/oracle/Dockerfile#L21-L32
 	\
